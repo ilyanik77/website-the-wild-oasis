@@ -2,14 +2,17 @@ import Image from "next/image"
 import Link from "next/link"
 
 import image1 from '@/public/about-1.jpg'
+import { getCabins } from "../_lib/data-service"
 
+export const revalidate = 86400
 
 export const metadata = {
 	title: 'About',
 }
 
+export default async function Page() {
+	const cabins = await getCabins()
 
-export default function Page() {
 	return (
 		<div className='grid grid-cols-5 gap-x-24 gap-y-32 text-lg items-center'>
 			<div className='col-span-3'>
@@ -27,11 +30,11 @@ export default function Page() {
 						enjoying simple pleasures with family.
 					</p>
 					<p>
-						Our 8 luxury cabins provide a cozy base, but the real
-						freedom and peace you&apos;ll find in the surrounding
-						mountains. Wander through lush forests, breathe in the
-						fresh air, and watch the stars twinkle above from the
-						warmth of a campfire or your hot tub.
+						Our {cabins.length} luxury cabins provide a cozy base, but
+						the real freedom and peace you&apos;ll find in the
+						surrounding mountains. Wander through lush forests,
+						breathe in the fresh air, and watch the stars twinkle
+						above from the warmth of a campfire or your hot tub.
 					</p>
 					<p>
 						This is where memorable moments are made, surrounded by
@@ -46,7 +49,7 @@ export default function Page() {
 				<Image
 					src={image1}
 					alt='Family sitting around a fire pit in front of cabin'
-					placeholder="blur"
+					placeholder='blur'
 					quality={80}
 				/>
 			</div>
@@ -55,7 +58,7 @@ export default function Page() {
 				<Image
 					src='/about-2.jpg'
 					fill
-					className="object-cover"
+					className='object-cover'
 					alt='Family that manages The Wild Oasis'
 				/>
 			</div>
