@@ -15,7 +15,7 @@ const authConfig = {
 		},
 		async signIn({user, account, profile}) {
 			try { 
-				const existingGuest = await getGuest(user.mail)
+				const existingGuest = await getGuest(user.email)
 				if(!existingGuest) await createGuest({email: user.email, fullName: user.name})
 				return true
 			} catch (error) {
@@ -23,8 +23,9 @@ const authConfig = {
 			}
 		},
 		async session({session, user}) {
-			const quest = await getGuest(session.user.email)
-			session.user.questId = quest.questId
+			const guest = await getGuest(session.user.email)
+			session.user.guestId = guest.id
+			
 			return session 
 		}
 	},
