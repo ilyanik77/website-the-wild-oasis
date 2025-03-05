@@ -30,11 +30,10 @@ export default async function Navigation() {
 							href='/account'
 							className='hover:text-accent-400 transition-colors flex gap-4 items-center'
 						>
-							<Image
-								width={25}
-								height={25}
-								// src={session.user.image}
+							<img
+								// Important to display google profile images
 								className='h-8 rounded-full'
+								src={session.user.image}
 								alt={session.user.name}
 								referrerPolicy='no-referrer'
 							/>

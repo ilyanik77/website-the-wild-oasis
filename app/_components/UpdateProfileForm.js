@@ -63,3 +63,4 @@ function UpdateProfileForm({ guest, children }) {
 	)
 }
 
+export default UpdateProfileForm

@@ -27,7 +27,7 @@ export async function updateGuest(formData) {
 
 	const updateData = { nationality, nationalID, countryFlag }
 
-	const { data, error } = await supabase
+	const { error } = await supabase
 		.from('guests')
 		.update(updateData)
 		.eq('id', session.user.guestId)
@@ -37,7 +37,7 @@ export async function updateGuest(formData) {
 	revalidatePath('/account/profile')
 }
 
-export async function deleteReservation(bookingId) {
+export async function deleteBooking(bookingId) {
 	const session = await auth()
 	if (!session) throw new Error('You must be logging in')
 
@@ -86,4 +86,31 @@ export async function updateBooking(formData) {
 	revalidatePath(`/account/reservations/edit/${bookingId}`)
 	revalidatePath('/account/reservations')
 	redirect('/account/reservations')
+}
+
+export async function createBooking(bookingData, formData) {
+	const session = await auth()
+	if (!session) throw new Error('You must be logging in')
+
+	const newBooking = {
+		...bookingData,
+		guestId: session.user.guestId,
+		numGuests: Number(formData.get('numGuests')),
+		observations: formData.get('observations').slice(0, 1000),
+		extrasPrice: 0,
+		totalPrice: bookingData.cabinPrice,
+		isPaid: false,
+		hasBreakfast: false,
+		status: 'unconfirmed',
+		created_at: new Date()
+	}
+
+	const { error } = await supabase.from('bookings').insert([newBooking])
+
+	if (error) throw new Error('Booking could not be created')
+
+	revalidatePath(`/cabins/${bookingData.cabinId}`)
+
+	redirect('/cabins/thankyou')
+	
 }
